@@ -1,52 +1,46 @@
 // Update with your config settings.
 
-require("dotenv").config;
-const pg = require("pg");
+require("dotenv").config();
+
 module.exports = {
   development: {
-    client: "sqlite3",
+    client: "pg",
     connection: {
-      filename: "./database/shops.db3"
+      host: "127.0.0.1",
+      user: process.env.USER,
+      password: process.env.PASSWORD,
+      database: process.env.DATABASE,
+      charset: "utf8"
     },
+    migrations: {
+      directory: "./database/migrations"
+    },
+    seeds: {
+      directory: "./database/seeds/dev"
+    },
+    useNullAsDefault: true
+  },
+
+  production: {
+    client: "pg",
+    connection: process.env.DATABASE_URL,
+    migrations: {
+      directory: "./database/migration"
+    },
+    seeds: {
+      directory: "./database/seed"
+    }
+  },
+
+  testing: {
+    client: "pg",
+    connection: `postgres://localhost/${process.env.PORT}`,
     migrations: {
       directory: "./database/migrations"
     },
     seeds: {
       directory: "./database/seeds"
     },
-    pool: {
-      afterCreate: (conn, done) => {
-        conn.run("PRAGMA foreign_keys = ON", done);
-      }
-    }
-  },
-
-  staging: {
-    client: "pg",
-    connection: {
-      database: "my_db",
-      user: "username",
-      password: "password"
-    },
-    pool: {
-      min: 2,
-      max: 10
-    },
-    migrations: {
-      directory: "./database/migrations"
-    },
-    seeds: "./database/seeds"
-  },
-
-  production: {
-    client: "pg",
-    connection: process.env.DATABASE_URL,
-    pool: {
-      min: 2,
-      max: 10
-    },
-    migrations: {
-      directory: "./migrations"
-    }
+    useNullAsDefault: true
   }
 };
