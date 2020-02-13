@@ -7,9 +7,7 @@ router.get("/", (req, res) => {
     .then(user => res.status(200).json(user))
     .catch(err => {
       console.log("does this show");
-      res
-        .status(500)
-        .json({ message: "There was a problem getting the users" });
+      res.status(500).json({ message: "I dont goofed" });
     });
 });
 
