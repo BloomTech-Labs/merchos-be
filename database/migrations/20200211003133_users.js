@@ -19,42 +19,33 @@ exports.up = function(knex) {
 
     tbl.string("password", 255).notNullable();
 
-    tbl.string("first_name", 100).notNullable();
+    tbl.string("first_name", 100);
 
-    tbl.string("last_name", 100).notNullable();
+    tbl.string("last_name", 100);
 
-    tbl.string("phone_number", 100).notNullable();
+    tbl.string("phone_number", 100);
 
-    tbl
-      .string("account_number", 255)
-      .unique()
-      .notNullable();
+    tbl.string("account_number", 255).unique();
 
-    tbl
-      .string("routing_number", 255)
-      .unique()
-      .notNullable();
+    tbl.string("routing_number", 255).unique();
 
-    tbl
-      .string("card_number", 255)
-      .unique()
-      .notNullable();
+    tbl.string("card_number", 255).unique();
 
-    tbl.string("card_exp", 255).notNullable();
+    tbl.string("card_exp", 255);
 
-    tbl.string("card_security", 255).notNullable();
+    tbl.string("card_security", 255);
 
-    tbl.string("card_name", 255).notNullable();
+    tbl.string("card_name", 255);
 
-    tbl.string("address_street", 255).notNullable();
+    tbl.string("address_street", 255);
 
-    tbl.string("address_city", 255).notNullable();
+    tbl.string("address_city", 255);
 
-    tbl.string("address_state", 255).notNullable();
+    tbl.string("address_state", 255);
 
-    tbl.string("address_country", 255).notNullable();
+    tbl.string("address_country", 255);
 
-    tbl.string("address_zip", 15).notNullable();
+    tbl.string("address_zip", 15);
   });
 };
 
