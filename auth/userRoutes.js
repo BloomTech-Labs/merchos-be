@@ -5,9 +5,12 @@ const User = require("./userModel");
 router.get("/", (req, res) => {
   User.findAll()
     .then(user => res.status(200).json(user))
-    .catch(err =>
-      res.status(500).json({ message: "There was a problem getting the users" })
-    );
+    .catch(err => {
+      console.log("does this show");
+      res
+        .status(500)
+        .json({ message: "There was a problem getting the users" });
+    });
 });
 
 router.post("/:id/register", (req, res) => {
