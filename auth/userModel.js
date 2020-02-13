@@ -8,7 +8,7 @@ const addRole = role => {
   return db("roles").insert(role);
 };
 
-findAllRoles = role => {
+const findAllRoles = role => {
   return db("roles");
 };
 
