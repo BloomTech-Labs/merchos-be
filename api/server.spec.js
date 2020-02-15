@@ -2,9 +2,20 @@ const server = require("./server");
 const request = require("supertest");
 const db = require("../config/dbConfig");
 
-describe("userRoutes.js", () => {
-  beforeEach(async () => {
-    await db("users").truncate();
+// beforeEach(async () => {
+//   await db("users").del();
+// });
+// beforeEach(async () => {
+//   await db("roles").del();
+// });
+
+describe("request to server", () => {
+  it("responds with 200", async done => {
+    await request(server)
+      .get("/")
+      .expect(200);
+
+    done();
   });
 });
 
@@ -14,6 +25,31 @@ describe("POST to /user/roles", () => {
       .post("/user/roles")
       .send({ role: "admin", role_desc: "is an admin" })
       .expect(201);
+    done();
+  });
+
+  it("responds with json", async done => {
+    await request(server)
+      .post("/user/roles")
+      .send({ role: "user", role_desc: "Can create a store" })
+      .expect(201);
+    done();
+  });
+
+  it("responds with json", async done => {
+    await request(server)
+      .get("/user/roles")
+      .expect(200);
+    done();
+  });
+});
+
+describe("POST to /user/login", () => {
+  it("responds with 200", async done => {
+    await request(server)
+      .post("/user/login")
+      .send({ username: "admin", password: "password" })
+      .expect(200);
     done();
   });
 });
@@ -26,12 +62,10 @@ describe("get request to /user", () => {
 
     done();
   });
-});
 
-describe("request to server", () => {
-  it("responds ok", async done => {
+  it("responds with json", async done => {
     await request(server)
-      .get("/")
+      .get("/user")
       .expect(200);
 
     done();
