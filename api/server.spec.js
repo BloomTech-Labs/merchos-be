@@ -2,13 +2,6 @@ const server = require("./server");
 const request = require("supertest");
 const db = require("../config/dbConfig");
 
-// beforeEach(async () => {
-//   await db("users").del();
-// });
-// beforeEach(async () => {
-//   await db("roles").del();
-// });
-
 describe("request to server", () => {
   it("responds with 200", async done => {
     await request(server)
