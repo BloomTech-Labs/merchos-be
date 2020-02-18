@@ -6,7 +6,6 @@ exports.up = function(knex) {
       .integer("role_id")
       .notNullable()
       .unsigned()
-      .unique()
       .references("id")
       .inTable("roles")
       .onUpdate("CASCADE")
