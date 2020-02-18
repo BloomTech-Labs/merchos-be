@@ -127,7 +127,7 @@ create a .env file that includes the following:
 _ USER - username for the database (only need if run locally)
 _ PASSWORD - password for the database (only need if run locally)
 _ DATABASE - name of database (only need if run locally)
-_ NODE*ENV - set to "development" until ready for "production"
+_ NODE_ENV - set to "development" until ready for "production"
 * JWT_SECRET - secret code used for JWT
 
 ## Contributing
