@@ -4,8 +4,8 @@
   "description": "store back-end ",
   "main": "index.js",
   "scripts": {
-    "server": "cross-env DB_ENV=development nodemon index.js",
-    "test": "cross-env DB_ENV=testing jest --watchAll",
+    "server": "cross-env NODE_ENV=development nodemon index.js",
+    "test": "cross-env NODE_ENV=testing jest --watch",
     "start": "node index.js"
   },
   "repository": {
