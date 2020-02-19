@@ -1,11 +1,21 @@
-import { secret } from '../config/secret';
+const jwt = require('jsonwebtoken');
+const secret = process.env.JWT_TOKEN;
 
-export const generateToken = user => {
+module.exports = generateToken;
+
+function generateToken(user) {
+  // payload will include the user id
   const payload = {
     userID: user.id
   };
 
-  const options = { expiresIn: '1h' };
-  const token = jwt.sign(payload, secret.jwtSecrets, options);
+  // jwt options
+  const options = {
+    // we'll set the token expiration to 1 hour
+    expiresIn: '1h'
+  };
+
+  // return a token, passing in payload, secret, and options
+  const token = jwt.sign(payload, secret, options);
   return token;
-};
+}

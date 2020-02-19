@@ -3,7 +3,8 @@ const db = require('../config/dbConfig.js');
 const add = user => {
   return db('users')
     .insert(user)
-    .returning('id');
+    .returning('id')
+    .then(ids => findById(ids[0]));
 };
 
 const addRole = role => {
@@ -25,7 +26,9 @@ const findBy = filter => {
 };
 
 const findById = id => {
-  return db('users').where({ id });
+  return db('users')
+    .where({ id })
+    .first();
 };
 
 const remove = id => {
