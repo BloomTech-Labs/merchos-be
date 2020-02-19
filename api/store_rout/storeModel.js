@@ -4,7 +4,6 @@ module.exports = {
     find,
     findBy,
     add,
-    findById,
     remove
 };
 
@@ -19,13 +18,6 @@ function findBy(name) {
 async function add(newStore) {
     return db('store')
     .insert(newStore, 'id');
-  };
-
-
-  function findById(id) {
-    return db('store')
-      .where({ id })
-      .first();
   };
 
   function remove(id) {

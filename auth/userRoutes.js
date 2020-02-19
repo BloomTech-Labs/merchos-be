@@ -37,7 +37,8 @@ router.post('/register', async (req, res) => {
   } catch (err) {
     res
       .status(500)
-      .json({ message: 'There was a problem when creating the user.' });
+      .json({ message: 'There was a problem when creating the user.', err });
+      console.log('ERROR WHILE TRYING TO REGISTER USER', err)
   }
 });
 

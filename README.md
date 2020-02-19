@@ -124,10 +124,10 @@ In order for the app to function correctly, the user must set up their own envir
 
 create a .env file that includes the following:
 
-_ USER - username for the database (only need if run locally)
-_ PASSWORD - password for the database (only need if run locally)
-_ DATABASE - name of database (only need if run locally)
-_ NODE_ENV - set to "development" until ready for "production"
+* USER - username for the database (only need if run locally)
+* PASSWORD - password for the database (only need if run locally)
+* DATABASE - name of database (only need if run locally)
+* NODE_ENV - set to "development" until ready for "production"
 * JWT_SECRET - secret code used for JWT
 
 ## Contributing
