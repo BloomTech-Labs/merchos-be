@@ -17,6 +17,9 @@ server.use(logger);
 const userRouter = require("../auth/userRoutes");
 server.use("/user", userRouter);
 
+const storeRouter = require("./store_rout/storeRouter");
+server.use("/store", storeRouter)
+
 server.get("/", (req, res) => {
   res.status(200).send({ message: "Sever is Live" });
 });
