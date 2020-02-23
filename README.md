@@ -1,5 +1,6 @@
 [![Maintainability](https://api.codeclimate.com/v1/badges/f8a81e8d0405db2b5ad4/maintainability)](https://codeclimate.com/github/Lambda-School-Labs/merchos-be/maintainability) [![Test Coverage](https://api.codeclimate.com/v1/badges/f8a81e8d0405db2b5ad4/test_coverage)](https://codeclimate.com/github/Lambda-School-Labs/merchos-be/test_coverage)
 
+
 # API Documentation
 
 #### Backend delpoyed at [Heroku](https://merchos-be.herokuapp.com/) <br>
@@ -8,10 +9,12 @@
 
 To get the server running locally:
 
+
 1. Clone this repo
 2. Enter the downloaded directory
 3. Install the dependencies (`yarn install` or `npm install`)
 4. Start the development server (`yarn server` or `npm run server`)
+
 
 ### Nodejs/express
 
@@ -115,11 +118,13 @@ In order for the app to function correctly, the user must set up their own envir
 
 create a .env file that includes the following:
 
+
     PORT - Specify a port for server to run on (default: 5000)
     USER - Username for local Postgres server
     PASSWORD - Password for local Postgres server
     DATABASE - Specify database on Postgres server
     JWT_TOKEN - JWT secret for authentication and authorization
+
 
 ## Contributing
 

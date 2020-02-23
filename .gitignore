@@ -78,6 +78,6 @@ typings/
 
 # DynamoDB Local files
 .dynamodb/
-
+# pacakges are too big yall
 package-lock.json
 yarn.lock
