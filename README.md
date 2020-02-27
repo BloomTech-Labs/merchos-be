@@ -1,6 +1,5 @@
 [![Maintainability](https://api.codeclimate.com/v1/badges/f8a81e8d0405db2b5ad4/maintainability)](https://codeclimate.com/github/Lambda-School-Labs/merchos-be/maintainability) [![Test Coverage](https://api.codeclimate.com/v1/badges/f8a81e8d0405db2b5ad4/test_coverage)](https://codeclimate.com/github/Lambda-School-Labs/merchos-be/test_coverage)
 
-
 # API Documentation
 
 #### Backend delpoyed at [Heroku](https://merchos-be.herokuapp.com/) <br>
@@ -9,12 +8,10 @@
 
 To get the server running locally:
 
-
 1. Clone this repo
 2. Enter the downloaded directory
 3. Install the dependencies (`yarn install` or `npm install`)
 4. Start the development server (`yarn server` or `npm run server`)
-
 
 ### Nodejs/express
 
@@ -27,10 +24,20 @@ To get the server running locally:
 
 #### User Routes
 
-| Method | Endpoint          | Access Control | Description      |
-| ------ | ----------------- | -------------- | ---------------- |
-| GET    | `/users/register` | all users      | Registers a user |
-| GET    | `/users/login`    | all users      | Logs a user in   |
+| Method | Endpoint         | Access Control | Description      |
+| ------ | ---------------- | -------------- | ---------------- |
+| POST   | `/user/register` | all users      | Registers a user |
+| POST   | `/user/login`    | all users      | Logs a user in   |
+
+#### Store Routes
+
+| Method | Endpoint       | Access Control | Description       |
+| ------ | -------------- | -------------- | ----------------- |
+| GET    | `/store`       | admin          | Gets all stores   |
+| GET    | `/store/:name` | all users      | Gets single store |
+| POST   | `/store`       | store owner    | Creates a store   |
+| PUT    | `/store/:name` | store owenr    | Updates a store   |
+| DELETE | `/store/:name` | store owner    | Deletes a store   |
 
 # Data Model
 
@@ -79,8 +86,8 @@ To get the server running locally:
 ```
 {
   id: UUID
-  name: STRING
-  url: STRING
+  store_name: STRING
+  store_url: STRING
 }
 ```
 
@@ -96,7 +103,55 @@ To get the server running locally:
 }
 ```
 
+#### page
+
+---
+
+```
+{
+  id: UUID
+  theme: TEXT
+  layout: TEXT
+  color: TEXT
+}
+```
+
+#### store_page
+
+---
+
+```
+{
+  id: UUID
+  store_id: UUID foreign key in STORE table
+  page_id: UUID foreign key in PAGE table
+}
+```
+
+#### component
+
+---
+
+```
+{
+  id: UUID
+}
+```
+
+#### page_component
+
+---
+
+```
+{
+  id: UUID
+  page_id: UUID foreing key in PAGE table
+}
+```
+
 ## Actions
+
+### User Model
 
 `add(user)` -> Adds a user to the database
 
@@ -112,19 +167,29 @@ To get the server running locally:
 
 `remove(id)` -> Deletes a user with a specific ID
 
+### Store Model
+
+`find()` -> Returns all stores
+
+`findBy(filter)` -> Returns specific store by certain filter
+
+`add(newStore)` -> Adds a new store
+
+`updateStore(filter, storeData)` -> Updates a store based on a filter
+
+`remove(filter)` -> Deletes a store based on filter
+
 ## Environment Variables
 
 In order for the app to function correctly, the user must set up their own environment variables.
 
 create a .env file that includes the following:
 
-
     PORT - Specify a port for server to run on (default: 5000)
     USER - Username for local Postgres server
     PASSWORD - Password for local Postgres server
     DATABASE - Specify database on Postgres server
     JWT_TOKEN - JWT secret for authentication and authorization
-
 
 ## Contributing
 

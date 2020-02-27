@@ -11,7 +11,7 @@ const addRole = role => {
   return db('roles').insert(role);
 };
 
-const findAllRoles = role => {
+const findAllRoles = () => {
   return db('roles');
 };
 

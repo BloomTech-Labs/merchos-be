@@ -102,7 +102,7 @@ router.put('/:name', async (req, res) => {
   }
 });
 
-// @ROUTE       DELETE /store/:id
+// @ROUTE       DELETE /store/:name
 // @DESC        DELETE a store
 // @AUTH        Private (Will require auth middleware)
 router.delete('/:name', (req, res) => {
