@@ -1,4 +1,4 @@
-const server = require('../server');
+const server = require('../api/server');
 const request = require('supertest');
 
 describe('request to get a list of stores', () => {
