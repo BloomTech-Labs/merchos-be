@@ -75,11 +75,42 @@ router.post('/', async (req, res) => {
   }
 });
 
+// @ROUTE       PUT /store/:name
+// @DESC        update a store
+// @AUTH        Private (Will require auth middleware)
+router.put('/:name', async (req, res) => {
+  // pull name from req.params
+  const { name } = req.params;
+  // following the db naming, set to lowercase convention
+  const store_name = name.toLowerCase();
+
+  // spread the req.body into out store variable
+  const store = { ...req.body };
+  try {
+    // await response from db on the update, passing in filter and store info
+    const storeData = await Store.updateStore({ store_name }, store);
+
+    // check if the response is undefined, if yes, reject
+    if (!storeData[0]) {
+      res.status(404).json({ message: 'Store was not found' });
+    }
+    // if not, respond with the new store data
+    res.status(201).json(storeData[0]);
+  } catch (err) {
+    console.log(err);
+    res.status(500).json({ message: 'Something went wrong' });
+  }
+});
+
 // @ROUTE       DELETE /store/:id
 // @DESC        DELETE a store
 // @AUTH        Private (Will require auth middleware)
-router.delete('/:id', (req, res) => {
-  Store.remove(req.params.id)
+router.delete('/:name', (req, res) => {
+  // pull name from req.params
+  const { name } = req.params;
+  // following the db naming, set to lowercase convention
+  const store_name = name.toLowerCase();
+  Store.remove({ store_name })
     .then(removed => {
       removed
         ? res.status(202).json({

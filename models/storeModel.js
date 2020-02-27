@@ -4,6 +4,7 @@ module.exports = {
   find,
   findBy,
   add,
+  updateStore,
   remove
 };
 
@@ -17,13 +18,20 @@ function findBy(filter) {
     .first();
 }
 
-async function add(newStore) {
+function add(newStore) {
   return db('store').insert(newStore, 'id');
 }
 
-function remove(id) {
+function updateStore(filter, storeData) {
   return db('store')
-    .where({ id })
+    .where(filter)
+    .update(storeData)
+    .returning('*');
+}
+
+function remove(filter) {
+  return db('store')
+    .where(filter)
     .first()
     .del();
 }
