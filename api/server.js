@@ -12,12 +12,10 @@ server.use(setting);
 server.use(logger);
 
 // ROUTES
-const userRouter = require('../routes/userRoutes');
-server.use('/user', userRouter);
+server.use('/user', require('../routes/userRoutes'));
+server.use('/store', require('../routes/storeRouter'));
 
-const storeRouter = require('../routes/storeRouter');
-server.use('/store', storeRouter);
-
+// Main route
 server.get('/', (req, res) => {
   res.status(200).send({ message: 'Sever is Live' });
 });

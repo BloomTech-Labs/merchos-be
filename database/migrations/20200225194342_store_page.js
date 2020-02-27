@@ -21,5 +21,5 @@ exports.up = function(knex) {
 };
 
 exports.down = function(knex) {
-  return knex.schema.deleteTableIfExists('store_page');
+  return knex.schema.dropTableIfExists('store_page');
 };

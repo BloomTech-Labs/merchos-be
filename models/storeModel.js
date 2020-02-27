@@ -11,8 +11,10 @@ function find() {
   return db('store');
 }
 
-function findBy(name) {
-  return db('store').where(name);
+function findBy(filter) {
+  return db('store')
+    .where(filter)
+    .first();
 }
 
 async function add(newStore) {
