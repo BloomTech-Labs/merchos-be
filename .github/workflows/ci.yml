@@ -17,7 +17,6 @@
     
         # The steps for the job, executed in sequence
         steps:
-    		
            # A GitHub action for checking out the current branch
           - uses: actions/checkout@master
     
@@ -29,7 +28,7 @@
           # Run the NPM install command before proceeding
             - run: npm install
     
-    			# A GitHub action for running tests and publishing coverage
+    			  # A GitHub action for running tests and publishing coverage
           - uses: paambaati/codeclimate-action@v2.4.0
             env:
     
