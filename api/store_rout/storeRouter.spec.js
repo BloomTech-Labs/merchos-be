@@ -10,14 +10,4 @@ describe('request to get a list of stores', () => {
   });
 });
 
-describe('POST to /store', () => {
-    it('responds with 201', async done => {
-      await request(server)
-        .post('/store')
-        .send({name:'TEST_STORE_', url: 'TEST_URL_' })
-        .expect(201);
-      done();
-    });
-});
-
 
