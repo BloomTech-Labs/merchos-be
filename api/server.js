@@ -14,6 +14,7 @@ server.use(logger);
 // ROUTES
 server.use('/user', require('../routes/userRoutes'));
 server.use('/store', require('../routes/storeRouter'));
+server.use('/page', require('../routes/pageRouter'));
 
 // Main route
 server.get('/', (req, res) => {

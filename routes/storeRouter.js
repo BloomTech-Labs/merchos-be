@@ -1,5 +1,9 @@
 const router = require('express').Router();
+
+// models
 const Store = require('../models/storeModel');
+const Pages = require('../models/pageModel');
+const StorePages = require('../models/storePageModel');
 
 module.exports = router;
 
@@ -42,11 +46,27 @@ router.get('/:name', async (req, res) => {
 });
 
 // @ROUTE       POST /store
-// @DESC        POST create A store
+// @DESC        POST create a store (and associated page)
 // @AUTH        Private (Will require auth middleware)
+// REQ MODEL:
+/**
+ * {
+ *    store: {
+ *        store_name: 'storename',
+ *        store_url: 'storeurl'
+ *      },
+ *    page: {
+ *        theme: '',
+ *        layout: '',
+ *        color: ''
+ *      }
+ * }
+ */
 router.post('/', async (req, res) => {
-  // pull store_name and store_url from req.body
-  const { store_name, store_url } = req.body;
+  // pull store
+  const { store } = req.body;
+  // pull store_name and store_url from store
+  const { store_name, store_url } = store;
 
   // check if those parameters exist, if not - reject
   if (!store_name && !store_url) {
@@ -56,15 +76,33 @@ router.post('/', async (req, res) => {
   }
 
   // for casing standards, set store_name to lowercase
-  req.body.store_name = store_name.toLowerCase();
+  req.body.store.store_name = store_name.toLowerCase();
   // do the same with store_url
-  req.body.store_url = store_url.toLowerCase();
+  req.body.store.store_url = store_url.toLowerCase();
 
-  // now pass the req.body into a new store variable
-  const store = { ...req.body };
+  // if req.body.page doesn't exist, create an empty object
+  if (!req.body.page) {
+    req.body.page = {
+      theme: '',
+      layout: '',
+      color: ''
+    };
+  }
+
+  // pull page from req.body
+  const { page } = req.body;
+
   try {
     // await the return of adding the store to the db
     const storeData = await Store.add(store);
+    // await the return of adding the page obj to db
+    const pageData = await Pages.addPage(page);
+    // add to associative table
+    const storePageData = await StorePages.addStorePage(storeData, pageData);
+    // return joined data
+    const storePage = await StorePages.findStorePage(storePageData.id);
+    console.log(storePage);
+
     // and respond with data
     res
       .status(201)

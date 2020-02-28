@@ -19,7 +19,12 @@ function findBy(filter) {
 }
 
 function add(newStore) {
-  return db('store').insert(newStore, 'id');
+  return db('store')
+    .insert(newStore)
+    .returning('*')
+    .then(ids => {
+      return findBy({ id: ids[0].id });
+    });
 }
 
 function updateStore(filter, storeData) {
