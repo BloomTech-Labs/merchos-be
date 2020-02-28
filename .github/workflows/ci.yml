@@ -10,7 +10,7 @@
       # A job to generate and publish code coverage
       coverage:
     		# A more descriptive name of the job
-        name: Test and publish test coverage
+        name: 'Test Checker with Code Climate'
     
     		# The OS on which the job will run
         runs-on: ubuntu-latest
