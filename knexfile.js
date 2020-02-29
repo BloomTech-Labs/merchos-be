@@ -35,7 +35,7 @@ module.exports = {
   testing: {
     client: "pg",
     connection: {
-      host: "127.0.0.1",
+      host: "127.0.0.1" || secrets.DATABASE_URL,
       user: process.env.USER,
       password: process.env.PASSWORD,
       database: process.env.DATABASE,
