@@ -101,12 +101,27 @@ router.post('/', async (req, res) => {
     const storePageData = await StorePages.addStorePage(storeData, pageData);
     // return joined data
     const storePage = await StorePages.findStorePage(storePageData.id);
-    console.log(storePage);
 
+    // construct a new object
+    const data = {
+      store: {
+        store_id: storePage.store_id,
+        info: {
+          store_name: storePage.store_name,
+          store_url: storePage.store_url
+        }
+      },
+      page: {
+        page_id: storePage.page_id,
+        info: {
+          theme: storePage.theme,
+          layout: storePage.layout,
+          color: storePage.color
+        }
+      }
+    };
     // and respond with data
-    res
-      .status(201)
-      .json({ message: 'Your store has been created.', storeData });
+    res.status(201).json({ message: 'Your store has been created.', data });
   } catch (error) {
     res.status(500).json(error);
     console.log('ERROR DURNING STORE CREATION', error);

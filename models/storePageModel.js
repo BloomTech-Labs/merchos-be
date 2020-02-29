@@ -21,5 +21,11 @@ function addStorePage(storeData, pageData) {
 }
 
 function findStorePage(id) {
-  return db('store_page').where({ id });
+  return db
+    .select('*')
+    .from('store_page AS sp')
+    .join('store AS s', 'sp.store_id', 's.id')
+    .join('page AS p', 'sp.page_id', 'p.id')
+    .where('sp.id', id)
+    .first();
 }
