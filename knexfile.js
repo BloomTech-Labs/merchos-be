@@ -35,7 +35,7 @@ module.exports = {
   testing: {
     client: "pg",
     connection: {
-      host: "127.0.0.1" || secrets.DATABASE_URL,
+      host: "127.0.0.1",
       user: process.env.USER,
       password: process.env.PASSWORD,
       database: process.env.DATABASE,
@@ -48,5 +48,15 @@ module.exports = {
       directory: "./database/seeds/dev"
     },
     useNullAsDefault: true
+  },
+  ccTesting: {
+    client: "pg",
+    connection: secrets.DATABASE_URL,
+    migrations: {
+      directory: "./database/migrations"
+    },
+    seeds: {
+      directory: "./database/seeds/dev"
+    }
   }
 };
