@@ -2,7 +2,9 @@ const db = require('../database/db-config');
 
 module.exports = {
   getPages,
-  addPage
+  addPage,
+  updatePage,
+  findBy
 };
 
 function getPages() {
@@ -24,6 +26,12 @@ function findBy(filter) {
     .first();
 }
 
+function updatePage(id, data) {
+  return db('page')
+    .where({ id })
+    .update(data);
+}
+
 // When you create a store, a page is also created, and is also created in the associative table (store_page)
 
 // User flow
@@ -41,10 +49,9 @@ function findBy(filter) {
  * 3. Joins with store_page to return page layout data
  */
 
-
- // STORE CREATION - DONE
- // STORE RETREIVING - DONE
- // STORE DELETION
- // PAGE Update
- // Update store info
- // TESTS
+// STORE CREATION - DONE
+// STORE RETREIVING - DONE
+// STORE DELETION - DONE
+// PAGE Update
+// Update store info - done
+// TESTS
