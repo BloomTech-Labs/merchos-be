@@ -7,7 +7,7 @@
     "server": "cross-env NODE_ENV=development nodemon index.js",
     "test": "cross-env NODE_ENV=testing jest --watch --detectOpenHandles --forceExit",
     "start": "node index.js",
-    "coverage": "jest --coverage --detectOpenHandles --forceExit || true"
+    "coverage": "NODE_ENV=testing jest --coverage --detectOpenHandles --forceExit || true"
   },
   "jest": {
     "collectCoverageFrom": [
