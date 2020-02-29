@@ -52,6 +52,6 @@ function updatePage(id, data) {
 // STORE CREATION - DONE
 // STORE RETREIVING - DONE
 // STORE DELETION - DONE
-// PAGE Update
-// Update store info - done
+// PAGE Update - DONE
+// Update store info - DONE
 // TESTS
