@@ -48,15 +48,5 @@ module.exports = {
       directory: "./database/seeds/dev"
     },
     useNullAsDefault: true
-  },
-  ccTesting: {
-    client: "pg",
-    connection: 'postgres://dxnkguylmorlnw:ab46398a1990fb35a8ba9bf22121f761c5644b380b364a8f914f000ccbf727cc@ec2-3-234-169-147.compute-1.amazonaws.com:5432/d4i8cunl9qr8sl',
-    migrations: {
-      directory: "./database/migrations"
-    },
-    seeds: {
-      directory: "./database/seeds/dev"
-    }
   }
 };
