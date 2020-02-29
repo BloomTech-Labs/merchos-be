@@ -1,5 +1,5 @@
 require('dotenv').config();
-const server = require('../api/server');
+const server = require('../../api/server');
 const request = require('supertest');
 
 describe('userRoutes.js', () => {

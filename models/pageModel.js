@@ -40,3 +40,11 @@ function findBy(filter) {
  * 2. This then traverses store_page data using the id
  * 3. Joins with store_page to return page layout data
  */
+
+
+ // STORE CREATION - DONE
+ // STORE RETREIVING - DONE
+ // STORE DELETION
+ // PAGE Update
+ // Update store info
+ // TESTS

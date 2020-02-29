@@ -21,6 +21,7 @@ router.get('/', (req, res) => {
 
 // @ROUTE       GET /store/:name
 // @DESC        GET that store by the stores name
+// @AUTH        Public
 router.get('/:name', async (req, res) => {
   // pull name from req.params
   const { name } = req.params;
@@ -29,16 +30,19 @@ router.get('/:name', async (req, res) => {
   try {
     // await store reponse by finding by the column name
     const store = await Store.findBy({ store_name });
+    // await joined response from storePage table
+    const storePage = await StorePages.findStorePage(store.id);
 
     // if nothing is returned, reject
     if (!store) {
       res.status(404).json({ message: 'This store does not exist' });
     }
 
-    // respond with the store data
-    res.status(200).json({
-      store
-    });
+    // construct a new object using storePage data
+    const data = StorePages.storePageObj(storePage);
+
+    // respond with both store and page data
+    res.status(200).json({ data });
   } catch (err) {
     console.log(err);
     res.status(500).json(err);
@@ -101,25 +105,8 @@ router.post('/', async (req, res) => {
     const storePageData = await StorePages.addStorePage(storeData, pageData);
     // return joined data
     const storePage = await StorePages.findStorePage(storePageData.id);
-
     // construct a new object
-    const data = {
-      store: {
-        store_id: storePage.store_id,
-        info: {
-          store_name: storePage.store_name,
-          store_url: storePage.store_url
-        }
-      },
-      page: {
-        page_id: storePage.page_id,
-        info: {
-          theme: storePage.theme,
-          layout: storePage.layout,
-          color: storePage.color
-        }
-      }
-    };
+    const data = StorePages.storePageObj(storePage);
     // and respond with data
     res.status(201).json({ message: 'Your store has been created.', data });
   } catch (error) {
@@ -158,21 +145,20 @@ router.put('/:name', async (req, res) => {
 // @ROUTE       DELETE /store/:name
 // @DESC        DELETE a store
 // @AUTH        Private (Will require auth middleware)
-router.delete('/:name', (req, res) => {
+router.delete('/:name', async (req, res) => {
   // pull name from req.params
   const { name } = req.params;
   // following the db naming, set to lowercase convention
   const store_name = name.toLowerCase();
-  Store.remove({ store_name })
-    .then(removed => {
-      removed
-        ? res.status(202).json({
-            removed_shop_id: req.params.id,
-            message: 'Store Has Been Deleted'
-          })
-        : res
-            .send(404)
-            .json({ message: `Could not find store with ID ${req.params.id}` });
-    })
-    .catch(error => res.status(500).json(error));
+  try {
+    // await store reponse by finding by the column name
+    const store = await Store.findBy({ store_name });
+    // await store deletion (also deletes page)
+    await StorePages.deleteStore(store.id);
+    // if successful, send message
+    res.status(202).json({ message: 'Store has been deleted' });
+  } catch (err) {
+    console.log(err);
+    res.status(500).json({ message: 'Server Error' });
+  }
 });

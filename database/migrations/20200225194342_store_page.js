@@ -5,6 +5,7 @@ exports.up = function(knex) {
     tbl
       .integer('store_id')
       .unsigned()
+      .notNullable()
       .references('id')
       .inTable('store')
       .onUpdate('CASCADE')
@@ -13,6 +14,7 @@ exports.up = function(knex) {
     tbl
       .integer('page_id')
       .unsigned()
+      .notNullable()
       .references('id')
       .inTable('page')
       .onUpdate('CASCADE')

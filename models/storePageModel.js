@@ -2,7 +2,9 @@ const db = require('../database/db-config');
 
 module.exports = {
   addStorePage,
-  findStorePage
+  findStorePage,
+  storePageObj,
+  deleteStore
 };
 
 // store_page table
@@ -28,4 +30,41 @@ function findStorePage(id) {
     .join('page AS p', 'sp.page_id', 'p.id')
     .where('sp.id', id)
     .first();
+}
+
+function storePageObj(data) {
+  return {
+    store: {
+      store_id: data.store_id,
+      info: {
+        store_name: data.store_name,
+        store_url: data.store_url
+      }
+    },
+    page: {
+      page_id: data.page_id,
+      info: {
+        theme: data.theme,
+        layout: data.layout,
+        color: data.color
+      }
+    }
+  };
+}
+
+async function deleteStore(store_id) {
+  try {
+    const storePage = await db('store_page')
+      .where({ store_id })
+      .first();
+    await db('store')
+      .where({ id: storePage.store_id })
+      .del();
+
+    await db('page')
+      .where({ id: storePage.page_id })
+      .del();
+  } catch (err) {
+    console.log(err);
+  }
 }
