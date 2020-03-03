@@ -10,7 +10,6 @@ describe('request to server', () => {
   });
 });
 
-
 describe('POST to /user/roles', () => {
   it('responds with 201', async done => {
     await request(server)

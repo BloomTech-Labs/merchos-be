@@ -162,3 +162,10 @@ router.delete('/:name', async (req, res) => {
     res.status(500).json({ message: 'Server Error' });
   }
 });
+
+// @ROUTE       GET /userstore
+// @DESC        Returns a specific user store based on JWT
+// @AUTH        Private
+router.get('/userstore', (req, res) => {
+  res.send('good');
+});
