@@ -27,12 +27,11 @@ router.post('/register', async (req, res) => {
     // await User helper to retun user data
     const userData = await User.add(user);
     // create a token using the userData object
-    const token = genToken(userData);
+    genToken(res, userData);
 
     // if all is successful, respond with user ID and token
     res.status(201).json({
-      user: userData.id,
-      token
+      user: userData.id
     });
   } catch (err) {
     res
@@ -44,15 +43,15 @@ router.post('/register', async (req, res) => {
 
 // @ROUTE       POST /user/login
 // @DESC        Login a user
-// @AUTH        Private
+// @AUTH        Public
 router.post('/login', (req, res) => {
   const { username, password } = req.body;
 
   User.findBy({ username })
     .then(user => {
       if (user && bcrypt.compareSync(password, user.password)) {
-        const token = genToken(user);
-        res.status(200).json({ user: user.id, token: token });
+        genToken(res, user);
+        res.status(200).json({ user: user.id });
       } else {
         console.log(user);
         res.status(401).json({ message: 'Invalid Username/Password' });

@@ -1,5 +1,8 @@
 const router = require('express').Router();
 
+// jwtVerify
+const jwtVerify = require('../utils/verifyToken');
+
 // models
 const Store = require('../models/storeModel');
 const Pages = require('../models/pageModel');
@@ -22,7 +25,7 @@ router.get('/', (req, res) => {
 // @ROUTE       GET /store/:name
 // @DESC        GET that store by the stores name
 // @AUTH        Public
-router.get('/:name', async (req, res) => {
+router.get('/:name', jwtVerify, async (req, res) => {
   // pull name from req.params
   const { name } = req.params;
   // following the db naming, set to lowercase convention
@@ -86,11 +89,7 @@ router.post('/', async (req, res) => {
 
   // if req.body.page doesn't exist, create an empty object
   if (!req.body.page) {
-    req.body.page = {
-      theme: '',
-      layout: '',
-      color: ''
-    };
+    req.body.page = { theme: '', layout: '', color: '' };
   }
 
   // pull page from req.body
