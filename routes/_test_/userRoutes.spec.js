@@ -1,9 +1,8 @@
 require('dotenv').config();
-const server = require('../api/server');
+const server = require('../../api/server');
 const request = require('supertest');
 
 describe('userRoutes.js', () => {
-  // before each, reset
   describe('POST to /user/register', () => {
     it('responds with 201', async () => {
       // since I am unable to truncate the user's table
@@ -42,9 +41,13 @@ describe('userRoutes.js', () => {
       // create a user object with username and password already seeded
       // - Although this should be changed as it's a real admin account
       let user = {
-        username: 'admin',
+        username: 'testingadmin',
         password: 'password'
       };
+
+      await request(server)
+        .post('/user/register')
+        .send(user);
 
       // await the response
       const res = await request(server)

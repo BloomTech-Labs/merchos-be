@@ -1,6 +1,6 @@
 const router = require('express').Router();
 const bcrypt = require('bcryptjs');
-const User = require('./userModel');
+const User = require('../models/userModel');
 
 // generate JWT
 const genToken = require('../utils/generateToken');
@@ -38,7 +38,7 @@ router.post('/register', async (req, res) => {
     res
       .status(500)
       .json({ message: 'There was a problem when creating the user.', err });
-      console.log('ERROR WHILE TRYING TO REGISTER USER', err)
+    console.log('ERROR WHILE TRYING TO REGISTER USER', err);
   }
 });
 
@@ -54,6 +54,7 @@ router.post('/login', (req, res) => {
         const token = genToken(user);
         res.status(200).json({ user: user.id, token: token });
       } else {
+        console.log(user);
         res.status(401).json({ message: 'Invalid Username/Password' });
       }
     })

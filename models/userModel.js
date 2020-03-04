@@ -1,4 +1,4 @@
-const db = require('../config/dbConfig.js');
+const db = require('../database/db-config');
 
 const add = user => {
   return db('users')
@@ -11,7 +11,7 @@ const addRole = role => {
   return db('roles').insert(role);
 };
 
-const findAllRoles = role => {
+const findAllRoles = () => {
   return db('roles');
 };
 
