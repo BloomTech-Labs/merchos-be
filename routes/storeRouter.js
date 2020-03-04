@@ -25,7 +25,7 @@ router.get('/', (req, res) => {
 // @ROUTE       GET /store/:name
 // @DESC        GET that store by the stores name
 // @AUTH        Public
-router.get('/:name', jwtVerify, async (req, res) => {
+router.get('/:name', async (req, res) => {
   // pull name from req.params
   const { name } = req.params;
   // following the db naming, set to lowercase convention
@@ -69,7 +69,8 @@ router.get('/:name', jwtVerify, async (req, res) => {
  *      }
  * }
  */
-router.post('/', async (req, res) => {
+router.post('/', jwtVerify, async (req, res) => {
+  console.log(req.user.userID);
   // pull store
   const { store } = req.body;
   // pull store_name and store_url from store

@@ -6,14 +6,13 @@ module.exports = (req, res, next) => {
 
   try {
     if (!token) {
-      res.status(401).json('You must be logged in');
+      res.status(401).json({ message: 'You must be logged in' });
     }
 
     const decrypt = jwt.verify(token, secret);
     req.user = {
       userID: decrypt.userID
     };
-    console.log('userID', req.user);
     next();
   } catch (err) {
     res.status(500).json(err.toString());

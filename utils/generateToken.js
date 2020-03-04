@@ -6,7 +6,7 @@ module.exports = generateToken;
 function generateToken(res, user) {
   // set expiration time for cookie
   const cookieExpiration =
-    process.env.NODE_ENV === 'development' ? 600000 : 3600000;
+    process.env.NODE_ENV === 'development' ? 3600000 : 600000;
   // payload will include the user id
   const payload = {
     userID: user.id
