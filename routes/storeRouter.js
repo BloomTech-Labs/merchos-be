@@ -1,8 +1,5 @@
 const router = require('express').Router();
 
-// verification middleware
-const jwtVerify = require('../utils/verifyToken');
-
 // models
 const Store = require('../models/storeModel');
 const Pages = require('../models/pageModel');
@@ -25,7 +22,7 @@ router.get('/', (req, res) => {
 // @ROUTE       GET /store/:name
 // @DESC        GET that store by the stores name
 // @AUTH        Public
-router.get('/:name', jwtVerify, async (req, res) => {
+router.get('/:name', async (req, res) => {
   // pull name from req.params
   const { name } = req.params;
   // following the db naming, set to lowercase convention
@@ -35,7 +32,6 @@ router.get('/:name', jwtVerify, async (req, res) => {
     const store = await Store.findBy({ store_name });
     // await joined response from storePage table
     const storePage = await StorePages.findStorePage(store.id);
-    console.log('storePage', storePage);
 
     // if nothing is returned, reject
     if (!store) {

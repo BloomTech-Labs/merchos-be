@@ -3,21 +3,11 @@ const helmet = require('helmet');
 const cors = require('cors');
 const morgan = require('morgan');
 const logger = require('./middleware/logger');
-const cookieParser = require('cookie-parser');
 
 const server = express();
 
 // middleware
-const setting = [
-  helmet(),
-  cors({
-    origin: [`${process.env.FRONTEND_URL}`],
-    credentials: true
-  }),
-  morgan('dev'),
-  express.json(),
-  cookieParser()
-];
+const setting = [helmet(), cors(), morgan('dev'), express.json()];
 server.use(setting);
 server.use(logger);
 
