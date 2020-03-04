@@ -36,8 +36,15 @@ To get the server running locally:
 | GET    | `/store`       | admin          | Gets all stores   |
 | GET    | `/store/:name` | all users      | Gets single store |
 | POST   | `/store`       | store owner    | Creates a store   |
-| PUT    | `/store/:name` | store owenr    | Updates a store   |
+| PUT    | `/store/:name` | store owner    | Updates a store   |
 | DELETE | `/store/:name` | store owner    | Deletes a store   |
+
+#### Page Routes
+
+| Method | Endpoint       | Access Control | Description       |
+| ------ | -------------- | -------------- | ----------------- |
+| GET    | `/page`        | admin          | Gets all pages    |
+| PUT    | `/page/:id`    | store owner    | Updates a page    |\
 
 # Data Model
 
@@ -179,6 +186,16 @@ To get the server running locally:
 
 `remove(filter)` -> Deletes a store based on filter
 
+### Store Page Model
+
+`addStorePage(storeData, pageData)` -> Adds to store_page and joins tables
+
+`findStorePage(id)` -> Searches for a specific store page
+
+`storePageObj(data)` -> Object constructor for response
+
+`deleteStore(filter, storeData)` -> Deletes a store
+
 ## Environment Variables
 
 In order for the app to function correctly, the user must set up their own environment variables.
@@ -190,6 +207,7 @@ create a .env file that includes the following:
     PASSWORD - Password for local Postgres server
     DATABASE - Specify database on Postgres server
     JWT_TOKEN - JWT secret for authentication and authorization
+    DATABASE_URL - shortened postgres credential url
 
 ## Contributing
 
