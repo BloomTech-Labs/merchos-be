@@ -8,7 +8,8 @@ module.exports = {
   remove,
   addUserStore,
   returnUserStores,
-  checkStores
+  checkStores,
+  constructURI
 };
 
 function find() {
@@ -61,6 +62,10 @@ function returnUserStores(user_id) {
 
 function checkStores(reqStore, userStores) {
   return userStores.filter(store => {
-    return store.store_name == reqStore;
+    return store.store_url == reqStore;
   })[0];
+}
+
+function constructURI(storename) {
+  return storename.toLowerCase().replace(/[^a-z0-9_]/gi, '');
 }

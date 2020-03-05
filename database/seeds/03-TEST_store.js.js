@@ -5,7 +5,7 @@ exports.seed = function(knex) {
     .then(function() {
       // Inserts seed entries
       return knex('store').insert([
-        { store_name: 'merchos_test_store', store_url: 'test' }
+        { store_name: 'MerchOS Test Store', store_url: 'merchos_test_store' }
       ]);
     });
 };
