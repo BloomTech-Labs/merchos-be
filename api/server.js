@@ -25,6 +25,7 @@ server.use(setting);
 server.use(logger);
 
 // ROUTES
+server.use('/auth', require('../routes/authRouter'));
 server.use('/user', require('../routes/userRoutes'));
 server.use('/store', require('../routes/storeRouter'));
 server.use('/page', require('../routes/pageRouter'));

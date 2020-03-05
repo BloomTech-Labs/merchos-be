@@ -7,7 +7,8 @@ module.exports = {
   updateStore,
   remove,
   addUserStore,
-  returnUserStores
+  returnUserStores,
+  checkStores
 };
 
 function find() {
@@ -52,8 +53,14 @@ function addUserStore(user_id, store_id) {
 
 function returnUserStores(user_id) {
   return db
-    .select('*')
+    .select('us.store_id', 's.store_name', 's.store_url')
     .from('user_store AS us')
     .where({ user_id })
     .join('store AS s', 's.id', '=', 'us.store_id');
+}
+
+function checkStores(reqStore, userStores) {
+  return userStores.filter(store => {
+    return store.store_name == reqStore;
+  })[0];
 }

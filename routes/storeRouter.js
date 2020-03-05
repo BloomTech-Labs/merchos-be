@@ -118,8 +118,7 @@ router.post('/', jwtVerify, async (req, res) => {
 // @ROUTE       PUT /store/:name
 // @DESC        update a store
 // @AUTH        Private
-router.put('/:name', jwtVerify, async (req, res) => {
-  console.log('userID', req.user.userID);
+router.put('/:name', async (req, res) => {
   // pull name from req.params
   const { name } = req.params;
   // following the db naming, set to lowercase convention
@@ -146,13 +145,24 @@ router.put('/:name', jwtVerify, async (req, res) => {
 // @ROUTE       DELETE /store/:name
 // @DESC        DELETE a store
 // @AUTH        Private (Will require auth middleware)
-router.delete('/:name', async (req, res) => {
+router.delete('/:name', jwtVerify, async (req, res) => {
+  const { userID } = req.user;
   // pull name from req.params
   const { name } = req.params;
   // following the db naming, set to lowercase convention
   const store_name = name.toLowerCase();
   try {
-    // await store reponse by finding by the column name
+    // return stores this user owns
+    const userStores = await Store.returnUserStores(userID);
+
+    // filters above array with what is being requested
+    const userStore = Store.checkStores(store_name, userStores);
+    // if the store doesn't exist for this specific user, reject
+    if (!userStore) {
+      res.status(404).json({ message: 'Store does not exist for this user' });
+    }
+
+    // else, await store reponse by finding by the column name
     const store = await Store.findBy({ store_name });
     // await store deletion (also deletes page)
     await StorePages.deleteStore(store.id);
