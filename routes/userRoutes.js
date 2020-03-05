@@ -1,9 +1,14 @@
 const router = require('express').Router();
 const bcrypt = require('bcryptjs');
+
+// Models
 const User = require('../models/userModel');
+const Store = require('../models/storeModel');
 
 // generate JWT
 const genToken = require('../utils/generateToken');
+// jwtVerify
+const jwtVerify = require('../utils/verifyToken');
 
 // @ROUTE       POST /user/registration
 // @DESC        Register a user as store owner (2)
@@ -61,6 +66,20 @@ router.post('/login', (req, res) => {
       console.log(err);
       res.status(500).json({ message: 'Could not login' });
     });
+});
+
+// @ROUTE       GET /user/stores
+// @DESC        Returns a specific user store based on JWT
+// @AUTH        Private
+router.get('/stores', jwtVerify, async (req, res) => {
+  try {
+    const userStores = await Store.returnUserStores(req.user.userID);
+
+    res.status(200).json(userStores);
+  } catch (err) {
+    console.log(err);
+    res.status(500).json(err);
+  }
 });
 
 // Admin routes

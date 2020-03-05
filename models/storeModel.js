@@ -5,7 +5,9 @@ module.exports = {
   findBy,
   add,
   updateStore,
-  remove
+  remove,
+  addUserStore,
+  returnUserStores
 };
 
 function find() {
@@ -39,4 +41,19 @@ function remove(filter) {
     .where(filter)
     .first()
     .del();
+}
+
+function addUserStore(user_id, store_id) {
+  return db('user_store').insert({
+    user_id,
+    store_id
+  });
+}
+
+function returnUserStores(user_id) {
+  return db
+    .select('*')
+    .from('user_store AS us')
+    .where({ user_id })
+    .join('store AS s', 's.id', '=', 'us.store_id');
 }

@@ -70,7 +70,6 @@ router.get('/:name', async (req, res) => {
  * }
  */
 router.post('/', jwtVerify, async (req, res) => {
-  console.log(req.user.userID);
   // pull store
   const { store } = req.body;
   // pull store_name and store_url from store
@@ -99,6 +98,8 @@ router.post('/', jwtVerify, async (req, res) => {
   try {
     // await the return of adding the store to the db
     const storeData = await Store.add(store);
+    // add user_store connection using ID from cookie and returned store id
+    await Store.addUserStore(req.user.userID, storeData.id);
     // await the return of adding the page obj to db
     const pageData = await Pages.addPage(page);
     // add to associative table
@@ -111,14 +112,14 @@ router.post('/', jwtVerify, async (req, res) => {
     res.status(201).json({ message: 'Your store has been created.', data });
   } catch (error) {
     res.status(500).json(error);
-    console.log('ERROR DURNING STORE CREATION', error);
   }
 });
 
 // @ROUTE       PUT /store/:name
 // @DESC        update a store
-// @AUTH        Private (Will require auth middleware)
-router.put('/:name', async (req, res) => {
+// @AUTH        Private
+router.put('/:name', jwtVerify, async (req, res) => {
+  console.log('userID', req.user.userID);
   // pull name from req.params
   const { name } = req.params;
   // following the db naming, set to lowercase convention
@@ -161,11 +162,4 @@ router.delete('/:name', async (req, res) => {
     console.log(err);
     res.status(500).json({ message: 'Server Error' });
   }
-});
-
-// @ROUTE       GET /userstore
-// @DESC        Returns a specific user store based on JWT
-// @AUTH        Private
-router.get('/userstore', (req, res) => {
-  res.send('good');
 });
