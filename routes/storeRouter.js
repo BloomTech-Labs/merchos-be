@@ -44,7 +44,6 @@ router.get('/:name', async (req, res) => {
     // respond with both store and page data
     res.status(200).json({ data });
   } catch (err) {
-    console.log(err);
     res.status(500).json(err);
   }
 });
@@ -58,7 +57,7 @@ router.get('/:name', async (req, res) => {
  *    store: {
  *        store_name: 'storename'
  *      },
- *    page: {
+ *    page: { // optional
  *        theme: '',
  *        layout: '',
  *        color: ''
@@ -69,15 +68,15 @@ router.post('/', jwtVerify, async (req, res) => {
   // pull store
   const { store } = req.body;
   // pull store_name and store_url from store
-  const { store_name } = store;
+  const { store_name, store_url } = store;
 
   // check if those parameters exist, if not - reject
   if (!store_name) {
     res.status(400).json({ message: 'Store name is required' });
+  } else if (!store_url) {
+    // construct a store_url based on store's name
+    req.body.store.store_url = await Store.constructURI(store_name);
   }
-
-  // construct a store_url based on store's name
-  req.body.store.store_url = await Store.constructURI(store_name);
 
   // if req.body.page doesn't exist, create an empty object
   if (!req.body.page) {
@@ -88,7 +87,13 @@ router.post('/', jwtVerify, async (req, res) => {
   const { page } = req.body;
 
   try {
-    // await the return of adding the store to the db
+    // search db for active store_url
+    const urlInUse = await Store.findBy({ store_url });
+    // if there is, reject and ask for customer store_url field
+    if (urlInUse) {
+      res.status(400).json({ message: 'Please create a custom URL' });
+    }
+    // otherwise, await the return of adding the store to the db
     const storeData = await Store.add(store);
     // add user_store connection using ID from cookie and returned store id
     await Store.addUserStore(req.user.userID, storeData.id);
@@ -115,7 +120,7 @@ router.post('/', jwtVerify, async (req, res) => {
  * {
  *    store: {
  *        store_name: 'storename',
- *        store_url: 'storeurl' (This is not needed)
+ *        store_url: 'storeurl' // optional
  *      }
  * }
  */
@@ -124,8 +129,7 @@ router.put('/:name', jwtVerify, async (req, res) => {
   const { userID } = req.user;
   // pull name from req.params
   const { name } = req.params;
-  // following the db naming, set to lowercase convention
-  const store_url = await Store.constructURI(name);
+  const store_url = name;
   // spread the req.body into out store variable
   const store = { ...req.body };
   try {
@@ -136,6 +140,15 @@ router.put('/:name', jwtVerify, async (req, res) => {
     // if the store doesn't exist for this specific user, reject
     if (!userStore) {
       res.status(404).json({ message: 'Store does not exist for this user' });
+    }
+    // if store_url exists in req and that is different from the name param
+    if (req.body.store_url && req.body.store_url !== name) {
+      // check if in use
+      const urlInUse = await Store.findBy({ store_url: req.body.store_url });
+      // if true, reject
+      if (urlInUse) {
+        res.status(400).json({ message: 'Store url already in use' });
+      }
     }
     // await response from db on the update, passing in filter and store info
     const storeData = await Store.updateStore({ store_url }, store);
