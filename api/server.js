@@ -12,8 +12,10 @@ const setting = [
   helmet(),
   cors({
     origin: [
-      `${process.env.FRONTEND_URL}`,
-      `${process.env.LOCAL_FRONTEND_URL}`
+      `${process.env.LOCAL_BACKEND_URL}`,
+      `${process.env.LOCAL_FRONTEND_URL}`,
+      `${process.env.STAGE_FRONTEND_URL}`,
+      `${process.env.PROD_FRONTEND_URL}`
     ],
     credentials: true
   }),

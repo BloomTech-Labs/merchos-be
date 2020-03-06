@@ -17,7 +17,7 @@ router.post('/register', async (req, res) => {
   const { username, password } = req.body;
   // if the body doesn't contain a username or password - reject
   if (!username || !password) {
-    res.status(404).json({ message: 'Username and Password required' });
+    res.status(400).json({ message: 'Username and Password required' });
   }
 
   // create new user object with the request, pass in default role id of 2
@@ -49,15 +49,19 @@ router.post('/register', async (req, res) => {
 // @DESC        Login a user
 // @AUTH        Public
 router.post('/login', (req, res) => {
-  const { username, password } = req.body;
+  const { username, password, rememberBox } = req.body;
+
+  // if the body doesn't contain a username or password - reject
+  if (!username || !password) {
+    res.status(400).json({ message: 'Username and Password required' });
+  }
 
   User.findBy({ username })
     .then(user => {
       if (user && bcrypt.compareSync(password, user.password)) {
-        genToken(res, user);
+        genToken(res, user, rememberBox);
         res.status(200).json({ user: user.id });
       } else {
-        console.log(user);
         res.status(401).json({ message: 'Invalid Username/Password' });
       }
     })
