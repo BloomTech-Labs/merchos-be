@@ -31,7 +31,7 @@ function generateToken(res, user, rememberBox = false) {
   // respond with a cookie, calling it token, and passing in the token
   return res.cookie('token', token, {
     expires: new Date(Date.now() + cookieExpiration),
-    secure: process.env.COOKIE_SECURE, // needs to be true for https
+    secure: false, // needs to be true for https
     httpOnly: true
   });
 }

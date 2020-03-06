@@ -10,6 +10,7 @@ const server = express();
 // middleware
 const setting = [
   helmet(),
+  cookieParser(),
   cors({
     origin: [
       `${process.env.LOCAL_BACKEND_URL}`,
@@ -20,8 +21,7 @@ const setting = [
     credentials: true
   }),
   morgan('dev'),
-  express.json(),
-  cookieParser()
+  express.json()
 ];
 server.use(setting);
 server.use(logger);

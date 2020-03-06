@@ -37,6 +37,12 @@ const remove = id => {
     .del();
 };
 
+function checkInUse(username) {
+  return db('users')
+    .where({ username })
+    .first();
+}
+
 module.exports = {
   add,
   addRole,
@@ -44,5 +50,6 @@ module.exports = {
   findAll,
   findBy,
   findById,
-  remove
+  remove,
+  checkInUse
 };

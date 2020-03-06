@@ -28,6 +28,13 @@ router.post('/register', async (req, res) => {
   user.password = hash;
 
   try {
+    // check if the username registered with is in use
+    const inUse = await User.checkInUse(username);
+    // if yes, reject
+    if (inUse) {
+      res.status(400).json({ message: 'Username is already in use' });
+    }
+
     // await User helper to retun user data
     const userData = await User.add(user);
     // create a token using the userData object
