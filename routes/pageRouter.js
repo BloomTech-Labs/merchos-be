@@ -1,5 +1,8 @@
 const router = require('express').Router();
 
+// jwtVerify
+const jwtVerify = require('../utils/verifyToken');
+
 // models
 const Pages = require('../models/pageModel');
 
@@ -30,11 +33,22 @@ router.get('/', async (req, res) => {
  *     color: ''
  *  }
  */
-router.put('/:id', async (req, res) => {
+router.put('/:id', jwtVerify, async (req, res) => {
+  // pull userID from cookie
+  const { userID } = req.user;
   // pull id from params
   const { id } = req.params;
   try {
-    // await for response if item was updated with body and id
+    // verify page belongs to a user with their user ID
+    const verifyPage = await Pages.verifyPage(userID, id);
+    // if page verification returns false, reject
+    if (verifyPage === false) {
+      res
+        .status(404)
+        .json({ message: "This page doesn't exist for this user" });
+    }
+
+    // otherwise, await for response if item was updated with body and id
     const updated = await Pages.updatePage(id, req.body);
     // if updated returns 0 - reject
     if (updated == 0) {
