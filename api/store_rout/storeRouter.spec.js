@@ -9,5 +9,3 @@ describe('request to get a list of stores', () => {
     done();
   });
 });
-
-

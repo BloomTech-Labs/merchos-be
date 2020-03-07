@@ -1,11 +1,9 @@
 exports.seed = function(knex) {
   // Deletes ALL existing entries
-  return knex("store")
+  return knex('user_store')
     .del()
     .then(function() {
       // Inserts seed entries
-      return knex("store").insert([
-        { name: "MERCHOS_TEST_STORE", url: "TEST" }
-      ]);
+      return knex('user_store').insert([{ user_id: 1, store_id: 1 }]);
     });
 };
