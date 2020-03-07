@@ -48,7 +48,6 @@ router.post('/register', async (req, res) => {
     res
       .status(500)
       .json({ message: 'There was a problem when creating the user.', err });
-    console.log('ERROR WHILE TRYING TO REGISTER USER', err);
   }
 });
 
@@ -73,7 +72,6 @@ router.post('/login', (req, res) => {
       }
     })
     .catch(err => {
-      console.log(err);
       res.status(500).json({ message: 'Could not login' });
     });
 });

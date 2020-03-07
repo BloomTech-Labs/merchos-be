@@ -3,7 +3,6 @@ const secret = process.env.JWT_TOKEN;
 
 module.exports = (req, res, next) => {
   const token = req.cookies.token || '';
-
   try {
     if (!token) {
       res.status(401).json({ message: 'You must be logged in' });

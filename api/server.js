@@ -24,7 +24,9 @@ const setting = [
   express.json()
 ];
 server.use(setting);
-server.use(logger);
+if (process.env.NODE_ENV === 'development') {
+  server.use(logger);
+}
 
 // ROUTES
 server.use('/auth', require('../routes/authRouter'));
