@@ -28,10 +28,12 @@ function generateToken(res, user, rememberBox = false) {
 
   // return a token, passing in payload, secret, and options
   const token = jwt.sign(payload, secret, options);
+  const secure = process.env.NODE_ENV === 'development' ? false : true;
+
   // respond with a cookie, calling it token, and passing in the token
   return res.cookie('token', token, {
     expires: new Date(Date.now() + cookieExpiration),
-    secure: false, // needs to be true for https
+    secure: secure, // needs to be true for https
     httpOnly: true
   });
 }
