@@ -4,9 +4,6 @@ const request = require('supertest');
 const db = require('../database/db-config');
 
 describe('request to server', () => {
-  beforeAll(async () => {
-    return await db.seed.run();
-  });
 
   it('responds with 200', async done => {
     await request(server)

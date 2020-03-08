@@ -189,6 +189,7 @@ router.delete('/:name', jwtVerify, async (req, res) => {
     // if successful, send message
     res.status(202).json({ message: 'Store has been deleted' });
   } catch (err) {
+    console.log(err);
     res.status(500).json({ message: 'Server Error' });
   }
 });
