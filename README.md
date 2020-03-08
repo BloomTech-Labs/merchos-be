@@ -22,12 +22,18 @@ To get the server running locally:
 
 ## Endpoints
 
-#### User Routes
+#### Auth Routes
 
 | Method | Endpoint         | Access Control | Description      |
 | ------ | ---------------- | -------------- | ---------------- |
-| POST   | `/user/register` | all users      | Registers a user |
-| POST   | `/user/login`    | all users      | Logs a user in   |
+| POST   | `/auth/register` | all users      | Registers a user |
+| POST   | `/auth/login`    | all users      | Logs a user in   |
+
+#### User Routes
+
+| Method | Endpoint       | Access Control | Description      |
+| ------ | -------------- | -------------- | ---------------- |
+| GET    | `/user/stores` | store owner    | Gets user stores |
 
 #### Store Routes
 
@@ -41,10 +47,10 @@ To get the server running locally:
 
 #### Page Routes
 
-| Method | Endpoint       | Access Control | Description       |
-| ------ | -------------- | -------------- | ----------------- |
-| GET    | `/page`        | admin          | Gets all pages    |
-| PUT    | `/page/:id`    | store owner    | Updates a page    |\
+| Method | Endpoint    | Access Control | Description    |
+| ------ | ----------- | -------------- | -------------- |
+| GET    | `/page`     | admin          | Gets all pages |
+| PUT    | `/page/:id` | store owner    | Updates a page | \  |
 
 # Data Model
 
@@ -174,6 +180,8 @@ To get the server running locally:
 
 `remove(id)` -> Deletes a user with a specific ID
 
+`checkInUse(username)` -> Checks a user is in db
+
 ### Store Model
 
 `find()` -> Returns all stores
@@ -186,6 +194,12 @@ To get the server running locally:
 
 `remove(filter)` -> Deletes a store based on filter
 
+`addUserStore(user_id, store_id)` -> adds a user to associative table
+
+`checkStores(reqStore, userStores)` -> Checks if user owns a store
+
+`constructURI(storename)` -> regex to create a url with a store name
+
 ### Store Page Model
 
 `addStorePage(storeData, pageData)` -> Adds to store_page and joins tables
@@ -195,6 +209,18 @@ To get the server running locally:
 `storePageObj(data)` -> Object constructor for response
 
 `deleteStore(filter, storeData)` -> Deletes a store
+
+### Page Model
+
+`getPages()` -> Returns all pages
+
+`addPage(page)` -> adds a page to page table
+
+`findBy(filter)` -> finds a page by filter
+
+`updatePage(id, data)` -> updates a page with a certain id
+
+`verifyPage(user_id, page_id)` -> Verify if a user owns a page
 
 ## Environment Variables
 
@@ -208,6 +234,10 @@ create a .env file that includes the following:
     DATABASE - Specify database on Postgres server
     JWT_TOKEN - JWT secret for authentication and authorization
     DATABASE_URL - shortened postgres credential url
+    LOCAL_BACKEND_URL - Backend url for cors origin
+    LOCAL_FRONTEND_URL - Development frontend environment for cors origin
+    STAGE_FRONTEND_URL - Staging frontend environment for cors origin
+    PROD_FRONTEND_URL - Production frontend environment for cors origin
 
 ## Contributing
 

@@ -1,5 +1,8 @@
 const router = require('express').Router();
 
+// jwtVerify
+const jwtVerify = require('../utils/verifyToken');
+
 // models
 const Store = require('../models/storeModel');
 const Pages = require('../models/pageModel');
@@ -26,25 +29,21 @@ router.get('/:name', async (req, res) => {
   // pull name from req.params
   const { name } = req.params;
   // following the db naming, set to lowercase convention
-  const store_name = name.toLowerCase();
+  const store_url = await Store.constructURI(name);
   try {
     // await store reponse by finding by the column name
-    const store = await Store.findBy({ store_name });
-    // await joined response from storePage table
-    const storePage = await StorePages.findStorePage(store.id);
-
+    const store = await Store.findBy({ store_url });
     // if nothing is returned, reject
     if (!store) {
       res.status(404).json({ message: 'This store does not exist' });
     }
-
+    // await joined response from storePage table
+    const storePage = await StorePages.findStorePage(store.id);
     // construct a new object using storePage data
     const data = StorePages.storePageObj(storePage);
-
     // respond with both store and page data
     res.status(200).json({ data });
   } catch (err) {
-    console.log(err);
     res.status(500).json(err);
   }
 });
@@ -56,49 +55,48 @@ router.get('/:name', async (req, res) => {
 /**
  * {
  *    store: {
- *        store_name: 'storename',
- *        store_url: 'storeurl'
+ *        store_name: 'storename'
  *      },
- *    page: {
+ *    page: { // optional
  *        theme: '',
  *        layout: '',
  *        color: ''
  *      }
  * }
  */
-router.post('/', async (req, res) => {
+router.post('/', jwtVerify, async (req, res) => {
   // pull store
   const { store } = req.body;
   // pull store_name and store_url from store
   const { store_name, store_url } = store;
 
   // check if those parameters exist, if not - reject
-  if (!store_name && !store_url) {
-    res
-      .status(400)
-      .json({ message: 'Both store name and store url are required' });
+  if (!store_name) {
+    res.status(400).json({ message: 'Store name is required' });
+  } else if (!store_url) {
+    // construct a store_url based on store's name
+    req.body.store.store_url = await Store.constructURI(store_name);
   }
-
-  // for casing standards, set store_name to lowercase
-  req.body.store.store_name = store_name.toLowerCase();
-  // do the same with store_url
-  req.body.store.store_url = store_url.toLowerCase();
 
   // if req.body.page doesn't exist, create an empty object
   if (!req.body.page) {
-    req.body.page = {
-      theme: '',
-      layout: '',
-      color: ''
-    };
+    req.body.page = { theme: '', layout: '', color: '' };
   }
 
   // pull page from req.body
   const { page } = req.body;
 
   try {
-    // await the return of adding the store to the db
+    // search db for active store_url
+    const urlInUse = await Store.findBy({ store_url });
+    // if there is, reject and ask for customer store_url field
+    if (urlInUse) {
+      res.status(400).json({ message: 'Please create a custom URL' });
+    }
+    // otherwise, await the return of adding the store to the db
     const storeData = await Store.add(store);
+    // add user_store connection using ID from cookie and returned store id
+    await Store.addUserStore(req.user.userID, storeData.id);
     // await the return of adding the page obj to db
     const pageData = await Pages.addPage(page);
     // add to associative table
@@ -111,25 +109,49 @@ router.post('/', async (req, res) => {
     res.status(201).json({ message: 'Your store has been created.', data });
   } catch (error) {
     res.status(500).json(error);
-    console.log('ERROR DURNING STORE CREATION', error);
   }
 });
 
 // @ROUTE       PUT /store/:name
 // @DESC        update a store
-// @AUTH        Private (Will require auth middleware)
-router.put('/:name', async (req, res) => {
+// @AUTH        Private
+// @REQ SCHEMA
+/**
+ * {
+ *    store: {
+ *        store_name: 'storename',
+ *        store_url: 'storeurl' // optional
+ *      }
+ * }
+ */
+router.put('/:name', jwtVerify, async (req, res) => {
+  // pull userID from JWT Cookie
+  const { userID } = req.user;
   // pull name from req.params
   const { name } = req.params;
-  // following the db naming, set to lowercase convention
-  const store_name = name.toLowerCase();
-
+  const store_url = name;
   // spread the req.body into out store variable
   const store = { ...req.body };
   try {
+    // return stores this user owns
+    const userStores = await Store.returnUserStores(userID);
+    // filters above array with what is being requested
+    const userStore = Store.checkStores(store_url, userStores);
+    // if the store doesn't exist for this specific user, reject
+    if (!userStore) {
+      res.status(404).json({ message: 'Store does not exist for this user' });
+    }
+    // if store_url exists in req and that is different from the name param
+    if (req.body.store_url && req.body.store_url !== name) {
+      // check if in use
+      const urlInUse = await Store.findBy({ store_url: req.body.store_url });
+      // if true, reject
+      if (urlInUse) {
+        res.status(400).json({ message: 'Store url already in use' });
+      }
+    }
     // await response from db on the update, passing in filter and store info
-    const storeData = await Store.updateStore({ store_name }, store);
-
+    const storeData = await Store.updateStore({ store_url }, store);
     // check if the response is undefined, if yes, reject
     if (!storeData[0]) {
       res.status(404).json({ message: 'Store was not found' });
@@ -137,7 +159,6 @@ router.put('/:name', async (req, res) => {
     // if not, respond with the new store data
     res.status(201).json(storeData[0]);
   } catch (err) {
-    console.log(err);
     res.status(500).json({ message: 'Something went wrong' });
   }
 });
@@ -145,14 +166,24 @@ router.put('/:name', async (req, res) => {
 // @ROUTE       DELETE /store/:name
 // @DESC        DELETE a store
 // @AUTH        Private (Will require auth middleware)
-router.delete('/:name', async (req, res) => {
+router.delete('/:name', jwtVerify, async (req, res) => {
+  // pull userID from JWT Cookie
+  const { userID } = req.user;
   // pull name from req.params
   const { name } = req.params;
-  // following the db naming, set to lowercase convention
-  const store_name = name.toLowerCase();
+  // following the db naming, construct URI
+  const store_url = await Store.constructURI(name);
   try {
-    // await store reponse by finding by the column name
-    const store = await Store.findBy({ store_name });
+    // return stores this user owns
+    const userStores = await Store.returnUserStores(userID);
+    // filters above array with what is being requested
+    const userStore = Store.checkStores(store_url, userStores);
+    // if the store doesn't exist for this specific user, reject
+    if (!userStore) {
+      res.status(404).json({ message: 'Store does not exist for this user' });
+    }
+    // else, await store reponse by finding by the column name
+    const store = await Store.findBy({ store_url });
     // await store deletion (also deletes page)
     await StorePages.deleteStore(store.id);
     // if successful, send message
@@ -161,11 +192,4 @@ router.delete('/:name', async (req, res) => {
     console.log(err);
     res.status(500).json({ message: 'Server Error' });
   }
-});
-
-// @ROUTE       GET /userstore
-// @DESC        Returns a specific user store based on JWT
-// @AUTH        Private
-router.get('/userstore', (req, res) => {
-  res.send('good');
 });
