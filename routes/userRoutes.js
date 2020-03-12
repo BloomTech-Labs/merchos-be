@@ -37,10 +37,7 @@ router.post('/roles', (req, res) => {
 
   User.addRole(role)
     .then(role => res.status(201).json(role))
-    .catch(err => {
-      console.log(err);
-      res.status(500).json({ message: 'Could not set a role.' });
-    });
+    .catch(err => res.status(500).json({ message: 'Could not set a role.' }));
 });
 
 router.get('/roles', (req, res) => {

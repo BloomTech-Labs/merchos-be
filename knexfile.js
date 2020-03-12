@@ -50,22 +50,17 @@ module.exports = {
     useNullAsDefault: true
   },
   test: {
-    client: 'pg',
-    connection: {
-      database: 'merchos-test',
-      user: 'postgres',
-      password: 'password',
-      port: 5432
+    client: "postgresql", connection: {
+        database: "merchos-test",
+        user: "postgres",
+        password: "password",
+        port: 5432,
+    }, migrations: {
+        directory: "./database/migrations",
+    }, seeds: {
+        directory: "./database/seeds",
+    }, pool: {
+        min: 2, max: 10,
     },
-    migrations: {
-      directory: './database/migrations'
-    },
-    seeds: {
-      directory: './database/seeds'
-    },
-    pool: {
-      min: 2,
-      max: 10
-    }
-  }
+}
 };
