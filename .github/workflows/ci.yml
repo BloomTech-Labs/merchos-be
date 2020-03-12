@@ -36,6 +36,7 @@ jobs:
 
       - run: npx knex migrate:latest --env "test"
       - run: npx knex seed:run --env "test"
+      - run: npm server
 
         # A GitHub action for running tests and publishing coverage
       - uses: paambaati/codeclimate-action@v2.4.0
