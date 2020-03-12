@@ -34,8 +34,8 @@ jobs:
         # Run the NPM install command before proceeding
       - run: npm install
 
-      - run: npx knex migrate:latest --env "testing"
-      - run: npx knex seed:run --env "testing"
+      - run: npx knex migrate:latest --env "test"
+      - run: npx knex seed:run --env "test"
 
         # A GitHub action for running tests and publishing coverage
       - uses: paambaati/codeclimate-action@v2.4.0
