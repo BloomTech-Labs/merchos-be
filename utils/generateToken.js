@@ -29,7 +29,7 @@ function generateToken(res, user, rememberBox = false) {
   // return a token, passing in payload, secret, and options
   const token = jwt.sign(payload, secret, options);
   const secure =
-    process.env.NODE_ENV === 'development' || process.env.NODE_ENV === 'testing'
+    process.env.NODE_ENV === 'development' || process.env.NODE_ENV === 'test'
       ? false
       : true;
 
