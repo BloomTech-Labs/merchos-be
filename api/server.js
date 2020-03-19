@@ -23,7 +23,7 @@ const setting = [
   morgan('dev'),
   express.json()
 ];
-server.set('trust proxy', 1)
+server.set('trust proxy', 'loopback')
 server.use(setting);
 if (process.env.NODE_ENV === 'development') {
   server.use(logger);
