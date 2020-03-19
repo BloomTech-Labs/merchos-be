@@ -94,7 +94,6 @@ router.post('/', jwtVerify, async (req, res) => {
     // if there is, reject and ask for customer store_url field
     if (urlInUse) {
       res.status(400).json({ message: 'Please create a custom URL' });
-      console.log(urlInUse);
     }
     // otherwise, await the return of adding the store to the db
     const storeData = await Store.add(store);
@@ -111,7 +110,6 @@ router.post('/', jwtVerify, async (req, res) => {
     // and respond with data
     res.status(201).json({ message: 'Your store has been created.', data });
   } catch (error) {
-    console.log(error);
     res.status(500).json(error);
   }
 });
