@@ -38,6 +38,6 @@ function generateToken(res, user, rememberBox = false) {
     expires: new Date(Date.now() + cookieExpiration),
     secure: secure, // needs to be true for https
     httpOnly: true,
-    sameSite: 'lax'
+    sameSite: 'none'
   });
 }
