@@ -37,6 +37,7 @@ function generateToken(res, user, rememberBox = false) {
   return res.cookie('token', token, {
     expires: new Date(Date.now() + cookieExpiration),
     secure: secure, // needs to be true for https
-    httpOnly: true
+    httpOnly: true,
+    sameSite: 'lax'
   });
 }
