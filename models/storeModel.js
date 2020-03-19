@@ -9,7 +9,8 @@ module.exports = {
   addUserStore,
   returnUserStores,
   checkStores,
-  constructURI
+  constructURI,
+  findByUrl
 };
 
 function find() {
@@ -19,6 +20,11 @@ function find() {
 function findBy(filter) {
   return db('store')
     .where(filter)
+    .first();
+}
+function findByUrl(store_url) {
+  return db('store')
+    .where({ store_url })
     .first();
 }
 

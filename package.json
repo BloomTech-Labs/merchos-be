@@ -1,12 +1,22 @@
 {
   "name": "merchos-be",
-  "version": "1.0.0",
+  "version": "0.2.1",
   "description": "store back-end ",
   "main": "index.js",
   "scripts": {
     "server": "cross-env NODE_ENV=development nodemon index.js",
-    "test": "cross-env NODE_ENV=testing jest --watch",
-    "start": "node index.js"
+    "test": "cross-env NODE_ENV=testing knex seed:run && jest --watch",
+    "start": "node index.js",
+    "coverage": "cross-env NODE_ENV=testing jest --coverage --detectOpenHandles --forceExit || true",
+    "git-coverage": "cross-env NODE_ENV=test jest --coverage --detectOpenHandles --forceExit || true"
+  },
+  "jest": {
+    "collectCoverageFrom": [
+      "**/*.{js,jsx}",
+      "!**/node_modules/**",
+      "!**/vendor/**",
+      "!**/__tests__/**"
+    ]
   },
   "repository": {
     "type": "git",
@@ -20,6 +30,7 @@
   "homepage": "https://github.com/Lambda-School-Labs/merchos-be#readme",
   "dependencies": {
     "bcryptjs": "^2.4.3",
+    "codeclimate-test-reporter": "^0.5.1",
     "cookie-parser": "^1.4.4",
     "cors": "^2.8.5",
     "dotenv": "^8.2.0",
@@ -29,8 +40,7 @@
     "knex": "^0.20.8",
     "knex-cleaner": "^1.3.0",
     "morgan": "^1.9.1",
-    "pg": "^7.18.1",
-    "sqlite3": "^4.1.1"
+    "pg": "^7.18.1"
   },
   "devDependencies": {
     "cross-env": "^7.0.0",
