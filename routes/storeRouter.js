@@ -32,7 +32,7 @@ router.get('/:name', async (req, res) => {
   const store_url = await Store.constructURI(name);
   try {
     // await store reponse by finding by the column name
-    const store = await Store.findBy({ store_url });
+    const store = await Store.findByUrl(store_url);
     // if nothing is returned, reject
     if (!store) {
       res.status(404).json({ message: 'This store does not exist' });
@@ -71,9 +71,11 @@ router.post('/', jwtVerify, async (req, res) => {
   const { store_name, store_url } = store;
 
   // check if those parameters exist, if not - reject
-  if (!store_name) {
+  if (!store_name || store_name === '') {
     res.status(400).json({ message: 'Store name is required' });
-  } else if (!store_url) {
+  }
+
+  if (!store_url || store_url === '') {
     // construct a store_url based on store's name
     req.body.store.store_url = await Store.constructURI(store_name);
   }
@@ -88,10 +90,11 @@ router.post('/', jwtVerify, async (req, res) => {
 
   try {
     // search db for active store_url
-    const urlInUse = await Store.findBy({ store_url });
+    const urlInUse = await Store.findByUrl(req.body.store.store_url);
     // if there is, reject and ask for customer store_url field
     if (urlInUse) {
       res.status(400).json({ message: 'Please create a custom URL' });
+      console.log(urlInUse);
     }
     // otherwise, await the return of adding the store to the db
     const storeData = await Store.add(store);
@@ -108,6 +111,7 @@ router.post('/', jwtVerify, async (req, res) => {
     // and respond with data
     res.status(201).json({ message: 'Your store has been created.', data });
   } catch (error) {
+    console.log(error);
     res.status(500).json(error);
   }
 });
