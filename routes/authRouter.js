@@ -20,6 +20,14 @@ router.post('/register', async (req, res) => {
     res.status(400).json({ message: 'Username and Password required' });
   }
 
+  // check for spaces in username
+  if (username.split(' ').length > 1) {
+    res.status(400).json({ message: 'Username cannot contain spaces' });
+  }
+
+  // convert usernames to lowercase to remove case sesitivity
+  req.body.username = username.toLowerCase();
+
   // create new user object with the request, pass in default role id of 2
   const user = { ...req.body, role_id: 2 };
   // hash the user password
@@ -42,7 +50,7 @@ router.post('/register', async (req, res) => {
 
     // if all is successful, respond with user ID and token
     res.status(201).json({
-      user: userData.id
+      user: userData.id,
     });
   } catch (err) {
     res
@@ -62,8 +70,11 @@ router.post('/login', (req, res) => {
     res.status(400).json({ message: 'Username and Password required' });
   }
 
+  // convert usernames to lowercase to remove case sesitivity
+  req.body.username = username.toLowerCase();
+
   User.findBy({ username })
-    .then(user => {
+    .then((user) => {
       if (user && bcrypt.compareSync(password, user.password)) {
         genToken(res, user, rememberBox);
         res.status(200).json({ user: user.id });
@@ -71,7 +82,7 @@ router.post('/login', (req, res) => {
         res.status(401).json({ message: 'Invalid Username/Password' });
       }
     })
-    .catch(err => {
+    .catch((err) => {
       res.status(500).json({ message: 'Could not login' });
     });
 });

@@ -5,13 +5,7 @@ require('dotenv').config();
 module.exports = {
   development: {
     client: 'pg',
-    connection: {
-      host: '127.0.0.1',
-      user: process.env.USER,
-      password: process.env.PASSWORD,
-      database: process.env.DATABASE,
-      charset: 'utf8'
-    },
+    connection: process.env.DATABASE_URL,
     migrations: {
       directory: './database/migrations'
     },
@@ -34,13 +28,7 @@ module.exports = {
 
   testing: {
     client: 'pg',
-    connection: {
-      host: '127.0.0.1',
-      user: process.env.USER,
-      password: process.env.PASSWORD,
-      database: process.env.DATABASE,
-      charset: 'utf8'
-    },
+    connection: process.env.DATABASE_URL,
     migrations: {
       directory: './database/migrations'
     },
@@ -51,12 +39,7 @@ module.exports = {
   },
   test: {
     client: 'postgresql',
-    connection: {
-      database: 'merchos-test',
-      user: 'postgres',
-      password: 'password',
-      port: 5432
-    },
+    connection: process.env.DATABASE_URL,
     migrations: {
       directory: './database/migrations'
     },
