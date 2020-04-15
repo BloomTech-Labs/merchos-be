@@ -93,7 +93,7 @@ router.post('/', jwtVerify, async (req, res) => {
     const urlInUse = await Store.findByUrl(req.body.store.store_url);
     // if there is, reject and ask for customer store_url field
     if (urlInUse) {
-      res.status(400).json({ message: 'Please create a custom URL' });
+      res.status(400).json({ message: 'This URL is already in use' });
     }
     // otherwise, await the return of adding the store to the db
     const storeData = await Store.add(store);
