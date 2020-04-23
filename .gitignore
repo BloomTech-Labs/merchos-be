@@ -81,3 +81,6 @@ typings/
 # pacakges are too big yall
 package-lock.json
 yarn.lock
+
+*/dist
+*/*/dist

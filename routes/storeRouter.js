@@ -1,5 +1,5 @@
 const router = require('express').Router();
-
+const productRouter = require('./productsRouter');
 // jwtVerify
 const jwtVerify = require('../utils/verifyToken');
 
@@ -66,7 +66,7 @@ router.get('/:name', async (req, res) => {
  */
 router.post('/', jwtVerify, async (req, res) => {
   // pull store
-  const { store } = req.body;
+  const { store, products } = req.body;
   // pull store_name and store_url from store
   const { store_name, store_url } = store;
 
@@ -85,6 +85,7 @@ router.post('/', jwtVerify, async (req, res) => {
     req.body.page = { theme: '', layout: '', color: '' };
   }
 
+
   // pull page from req.body
   const { page } = req.body;
 
@@ -100,6 +101,10 @@ router.post('/', jwtVerify, async (req, res) => {
     // add user_store connection using ID from cookie and returned store id
     await Store.addUserStore(req.user.userID, storeData.id);
     // await the return of adding the page obj to db
+
+    // await the return of all of the products being added to the store
+    products.map(async (product) => await Products.add(product, storeData.id));
+
     const pageData = await Pages.addPage(page);
     // add to associative table
     const storePageData = await StorePages.addStorePage(storeData, pageData);
@@ -195,3 +200,5 @@ router.delete('/:name', jwtVerify, async (req, res) => {
     res.status(500).json({ message: 'Server Error' });
   }
 });
+
+
