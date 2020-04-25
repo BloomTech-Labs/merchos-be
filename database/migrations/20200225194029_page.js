@@ -1,13 +1,12 @@
-exports.up = function(knex) {
-  return knex.schema.createTable('page', tbl => {
+exports.up = function (knex) {
+  return knex.schema.createTable("page", (tbl) => {
     tbl.increments();
 
-    tbl.text('theme');
-    tbl.text('layout');
-    tbl.text('color');
+    tbl.text("layout");
+    tbl.text("content");
   });
 };
 
-exports.down = function(knex) {
-  return knex.schema.dropTableIfExists('page');
+exports.down = function (knex) {
+  return knex.schema.dropTableIfExists("page");
 };
