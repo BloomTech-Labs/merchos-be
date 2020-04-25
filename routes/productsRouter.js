@@ -17,7 +17,6 @@ router.get('/:store_id', (req, res) => {
             }
         }).catch((err) => {
           
-            console.log(err);
             res.status(500).json({ message: "an error has occurred with finding products please try again." })
         });
 
