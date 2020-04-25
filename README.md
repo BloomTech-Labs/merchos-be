@@ -171,7 +171,7 @@ To get the server running locally:
 }
 ```
 
-#### user_store
+#### product
 
 ---
 
