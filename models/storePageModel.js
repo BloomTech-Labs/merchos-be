@@ -26,7 +26,7 @@ function findStorePage(id) {
     .from("store_page AS sp")
     .join("store AS s", "sp.store_id", "s.id")
     .join("page AS p", "sp.page_id", "p.id")
-    .where("sp.id", id)
+    .where("sp.store_id", id)
     .first();
 }
 

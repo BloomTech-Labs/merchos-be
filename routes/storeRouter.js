@@ -29,7 +29,7 @@ router.get("/:name", async (req, res) => {
   // pull name from req.params
   const { name } = req.params;
   // following the db naming, set to lowercase convention
-  const store_url = await Store.constructURI(name);
+  const store_url = name
   try {
     // await store reponse by finding by the column name
     const store = await Store.findByUrl(store_url);
@@ -83,7 +83,7 @@ router.post("/", jwtVerify, async (req, res) => {
 
   // if req.body.page doesn't exist, create an empty object
   if (!req.body.page) {
-    req.body.page = { theme: "", layout: "", color: "" };
+    req.body.page = { layout: "", content: "" };
   }
 
   // pull page from req.body
@@ -111,6 +111,7 @@ router.post("/", jwtVerify, async (req, res) => {
     // and respond with data
     res.status(201).json({ message: "Your store has been created.", data });
   } catch (error) {
+    console.log(error)
     res.status(500).json(error);
   }
 });
