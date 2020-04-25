@@ -52,6 +52,15 @@ To get the server running locally:
 | GET    | `/page`     | admin          | Gets all pages |
 | PUT    | `/page/:id` | store owner    | Updates a page | \  |
 
+
+#### Product Routes
+
+| Method | Endpoint                        | Access Control | Description                                 |
+| ------ | ------------------------------- | -------------- | ------------------------------------------- |
+| GET    | `/products/:store_id`           | store owner    | Gets all products for store with store_id   |
+| GET    | `/products/product/:product_id` | store owner    | Gets single product with product_id         |
+| DELETE | `/products/product/:product_id` | store owner    | Deletes product with product_id             |
+
 # Data Model
 
 #### ROLES

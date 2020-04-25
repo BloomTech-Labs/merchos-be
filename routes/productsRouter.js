@@ -5,20 +5,26 @@ const Products = require("../models/productsModel");
 module.exports = router;
 // GET STORE PRODUCTS
 
-router.get('/', (req, res) => {
-    const { store_id } = req.body;
+router.get('/:store_id', (req, res) => {
+    const { store_id } = req.params;
 
     Products.findByStoreId(store_id)
         .then((products) => {
-            res.status(200).json(products);
+            if(products.length > 0){
+                res.status(200).json(products);
+            }else{
+                res.status(400).json({message:"no products created, create some."})
+            }
         }).catch((err) => {
+          
+            console.log(err);
             res.status(500).json({ message: "an error has occurred with finding products please try again." })
         });
 
 })
 
 
-router.get('/:product_id', (req, res) => {
+router.get('/product/:product_id', (req, res) => {
     const { product_id } = req.params;
 
     Products.findById(product_id)
@@ -34,7 +40,7 @@ router.get('/:product_id', (req, res) => {
 
 })
 
-router.delete('/:product_id', (req, res) => {
+router.delete('/product/:product_id', (req, res) => {
     const { product_id } = req.params;
 
     Products.remove(product_id)
