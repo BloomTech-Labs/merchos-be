@@ -52,6 +52,15 @@ To get the server running locally:
 | GET    | `/page`     | admin          | Gets all pages |
 | PUT    | `/page/:id` | store owner    | Updates a page | \  |
 
+
+#### Product Routes
+
+| Method | Endpoint                        | Access Control | Description                                 |
+| ------ | ------------------------------- | -------------- | ------------------------------------------- |
+| GET    | `/products/:store_id`           | store owner    | Gets all products for store with store_id   |
+| GET    | `/products/product/:product_id` | store owner    | Gets single product with product_id         |
+| DELETE | `/products/product/:product_id` | store owner    | Deletes product with product_id             |
+
 # Data Model
 
 #### ROLES
@@ -162,6 +171,19 @@ To get the server running locally:
 }
 ```
 
+#### product
+
+---
+
+```
+{
+  id: UUID
+  product_id: TEXT
+  color: TEXT 
+  store_id: UUID foreign key in STORE table
+}
+```
+
 ## Actions
 
 ### User Model
@@ -222,6 +244,17 @@ To get the server running locally:
 
 `verifyPage(user_id, page_id)` -> Verify if a user owns a page
 
+
+### Product Model
+
+`findByStoreId(store_id)`  -> returns all products from store with store_id
+
+`findById(product_id)`  -> returns product with product_id
+
+`add(product)`  -> creates a product in the product table
+
+`remove(product_id)`  -> removes a product from the product table
+
 ## Environment Variables
 
 In order for the app to function correctly, the user must set up their own environment variables.
@@ -238,6 +271,7 @@ create a .env file that includes the following:
     LOCAL_FRONTEND_URL - Development frontend environment for cors origin
     STAGE_FRONTEND_URL - Staging frontend environment for cors origin
     PROD_FRONTEND_URL - Production frontend environment for cors origin
+    SCALABLE_PRESS_API - API for ScalablePress interaction
 
 ## Contributing
 
