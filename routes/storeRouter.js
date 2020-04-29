@@ -1,5 +1,5 @@
 const router = require("express").Router();
-
+const productRouter = require("./productsRouter");
 // jwtVerify
 const jwtVerify = require("../utils/verifyToken");
 
@@ -29,7 +29,7 @@ router.get("/:name", async (req, res) => {
   // pull name from req.params
   const { name } = req.params;
   // following the db naming, set to lowercase convention
-  const store_url = name
+  const store_url = name;
   try {
     // await store reponse by finding by the column name
     const store = await Store.findByUrl(store_url);
@@ -67,7 +67,7 @@ router.get("/:name", async (req, res) => {
  */
 router.post("/", jwtVerify, async (req, res) => {
   // pull store
-  const { store } = req.body;
+  const { store, products } = req.body;
   // pull store_name and store_url from store
   const { store_name, store_url } = store;
 
@@ -94,13 +94,21 @@ router.post("/", jwtVerify, async (req, res) => {
     const urlInUse = await Store.findByUrl(req.body.store.store_url);
     // if there is, reject and ask for customer store_url field
     if (urlInUse) {
-      res.status(400).json({ message: "This URL is already in use" });
+      res.status(400).json({ message: "Please create a custom URL" });
     }
     // otherwise, await the return of adding the store to the db
     const storeData = await Store.add(store);
     // add user_store connection using ID from cookie and returned store id
     await Store.addUserStore(req.user.userID, storeData.id);
     // await the return of adding the page obj to db
+
+    // await the return of all of the products being added to the store
+    // if the products has length greater than 0 then it its able to be mapped
+    products > 0 &&
+      products.map(
+        async (product) => await Products.add(product, storeData.id)
+      );
+
     const pageData = await Pages.addPage(page);
     // add to associative table
     const storePageData = await StorePages.addStorePage(storeData, pageData);
@@ -111,7 +119,7 @@ router.post("/", jwtVerify, async (req, res) => {
     // and respond with data
     res.status(201).json({ message: "Your store has been created.", data });
   } catch (error) {
-    console.log(error)
+    console.log(error);
     res.status(500).json(error);
   }
 });

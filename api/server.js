@@ -34,6 +34,7 @@ server.use('/auth', require('../routes/authRouter'));
 server.use('/user', require('../routes/userRoutes'));
 server.use('/store', require('../routes/storeRouter'));
 server.use('/page', require('../routes/pageRouter'));
+server.use('/products', require('../routes/productsRouter'));
 
 // Main route
 server.get('/', (req, res) => {
